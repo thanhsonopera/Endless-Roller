@@ -258,9 +258,9 @@ function update(){
 		doExplosionLogic();
 		render();
 	}
-	
 	requestAnimationFrame(update);//request next update
 }
+
 document.getElementById('resume-button').addEventListener('click', resumeGame);
 
 function resumeGame() {
@@ -288,18 +288,21 @@ function updateHealth(newHealth) {
     document.getElementById('health-value').textContent = health;
 }
 function doTreeLogic(){
-	var oneTree;
+	//var oneTree;
 	var treePos = new THREE.Vector3();
 	var treesToRemove=[];
 	treesInPath.forEach( function ( element, index ) {
-		oneTree=treesInPath[ index ];
+		var oneTree=treesInPath[ index ];
 		treePos.setFromMatrixPosition( oneTree.matrixWorld );
 		if(treePos.z>6 &&oneTree.visible){//gone out of our view zone
 			treesToRemove.push(oneTree);
 		}else{//check collision
 			if(treePos.distanceTo(heroSphere.position)<=0.6){
-				console.log("hit");
-				updateHealth(health - 1);
+				console.log(oneTree.isCollided);
+				if (oneTree.isCollided == false) {
+					updateHealth(health - 1);
+				}
+				oneTree.isCollided=true;
 				hasCollided=true;
 				explode();
 			}
@@ -307,7 +310,7 @@ function doTreeLogic(){
 	});
 	var fromWhere;
 	treesToRemove.forEach( function ( element, index ) {
-		oneTree=treesToRemove[ index ];
+		var oneTree=treesToRemove[ index ];
 		fromWhere=treesInPath.indexOf(oneTree);
 		treesInPath.splice(fromWhere,1);
 		treesPool.push(oneTree);

@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+
 Tree = function(){
 	var sides=8;
 	var tiers=6;
@@ -29,39 +30,42 @@ Tree = function(){
 	var tree =new THREE.Object3D();
 	tree.add(treeTrunk);
 	tree.add(treeTop);
-	function blowUpTree(vertices,sides,currentTier,scalarMultiplier,odd){
-		var vertexIndex;
-		var vertexVector= new THREE.Vector3();
-		var midPointVector=vertices[0].clone();
-		var offset;
-		for(var i=0;i<sides;i++){
-			vertexIndex=(currentTier*sides)+1;
-			vertexVector=vertices[i+vertexIndex].clone();
-			midPointVector.y=vertexVector.y;
-			offset=vertexVector.sub(midPointVector);
-			if(odd){
-				if(i%2===0){
-					offset.normalize().multiplyScalar(scalarMultiplier/6);
-					vertices[i+vertexIndex].add(offset);
-				}else{
-					offset.normalize().multiplyScalar(scalarMultiplier);
-					vertices[i+vertexIndex].add(offset);
-					vertices[i+vertexIndex].y=vertices[i+vertexIndex+sides].y+0.05;
-				}
+	tree.isCollided=false;
+	return tree;
+}
+
+function blowUpTree(vertices,sides,currentTier,scalarMultiplier,odd){
+	var vertexIndex;
+	var vertexVector= new THREE.Vector3();
+	var midPointVector=vertices[0].clone();
+	var offset;
+	for(var i=0;i<sides;i++){
+		vertexIndex=(currentTier*sides)+1;
+		vertexVector=vertices[i+vertexIndex].clone();
+		midPointVector.y=vertexVector.y;
+		offset=vertexVector.sub(midPointVector);
+		if(odd){
+			if(i%2===0){
+				offset.normalize().multiplyScalar(scalarMultiplier/6);
+				vertices[i+vertexIndex].add(offset);
 			}else{
-				if(i%2!==0){
-					offset.normalize().multiplyScalar(scalarMultiplier/6);
-					vertices[i+vertexIndex].add(offset);
-				}else{
-					offset.normalize().multiplyScalar(scalarMultiplier);
-					vertices[i+vertexIndex].add(offset);
-					vertices[i+vertexIndex].y=vertices[i+vertexIndex+sides].y+0.05;
-				}
+				offset.normalize().multiplyScalar(scalarMultiplier);
+				vertices[i+vertexIndex].add(offset);
+				vertices[i+vertexIndex].y=vertices[i+vertexIndex+sides].y+0.05;
+			}
+		}else{
+			if(i%2!==0){
+				offset.normalize().multiplyScalar(scalarMultiplier/6);
+				vertices[i+vertexIndex].add(offset);
+			}else{
+				offset.normalize().multiplyScalar(scalarMultiplier);
+				vertices[i+vertexIndex].add(offset);
+				vertices[i+vertexIndex].y=vertices[i+vertexIndex+sides].y+0.05;
 			}
 		}
 	}
-	return tree;
 }
+
 function tightenTree(vertices,sides,currentTier){
 	var vertexIndex;
 	var vertexVector= new THREE.Vector3();
@@ -76,4 +80,5 @@ function tightenTree(vertices,sides,currentTier){
 		vertices[i+vertexIndex].sub(offset);
 	}
 }
+
 export default Tree;
