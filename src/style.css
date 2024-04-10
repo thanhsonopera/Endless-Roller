@@ -2,32 +2,52 @@ body{
     margin: 0;
     padding: 0;
 }
-#game-container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-  }
-  
-  #overlay {
+#pause-screen {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+#pause-screen-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+#pause-screen h1 {
+    text-align: center;
+    color: #000;
+}
+
+#high-score {
     position: fixed;
     top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5); /* Phủ màu đen với opacity 0.5 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .hidden {
-    display: none; /* Ẩn overlay ban đầu */
-  }
-  
-  #replay-btn {
-    padding: 10px 20px;
-    font-size: 18px;
-    background-color: #fff;
-    border: 2px solid #000;
-    cursor: pointer;
-  }
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 2; /* Sit on top */
+    color: #000;
+    font-size: 24px;
+}
+
+#health {
+    position: fixed;
+    top: 30px; /* Adjust this value as needed */
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 2; /* Sit on top */
+    color: #000;
+    font-size: 24px;
+}
+
+#heart-icon {
+    width: 24px;
+    height: 24px;
+}

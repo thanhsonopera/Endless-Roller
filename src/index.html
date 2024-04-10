@@ -3,12 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="./style.css">
     <title>Endless Roller</title>
 </head>
 <body>
     <div id="TutContainer"></div>
+    <div id="high-score">High Score: <span id="high-score-value">0</span></div>
+    <div id="health">
+        <i id="heart-icon" class="fas fa-heart"></i>
+        <span id="health-value">3</span>
+    </div>
+    <div id="pause-screen">
+        <div id="pause-screen-content">
+            <h1>Game Paused</h1>
+            <button id="resume-button">Resume Game</button>
+            <!-- Add more content here if needed -->
+        </div>
+    </div>
     <script type = "module" src = "./js/main.js" ></script>
+
 </body>
    
 </html>

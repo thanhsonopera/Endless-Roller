@@ -41,11 +41,14 @@ var particleGeometry;
 var particleCount=20;
 var explosionPower =1.06;
 var particles;
-var gameOver = false;
+//var stats;
 var scoreText;
 var score;
 var hasCollided;
 
+
+var state = 1;
+var health = 3; // Initialize health
 init();
 
 function init() {
@@ -54,7 +57,6 @@ function init() {
 
 	//call game loop
 	update();
-	gameOver = false;
 }
 
 function handleKeyDown(keyEvent){
@@ -232,30 +234,59 @@ function addTree(inPath, row, isLeft){
 
 
 function update(){
-	if(gameOver)return;
-    rollingGroundSphere.rotation.x += rollingSpeed;
-    heroSphere.rotation.x -= heroRollingSpeed;
-    if(heroSphere.position.y<=heroBaseY){
-    	jumping=false;
-    	bounceValue=(Math.random()*0.04)+0.005;
-    }
-    heroSphere.position.y+=bounceValue;
-    heroSphere.position.x=THREE.Math.lerp(heroSphere.position.x,currentLane, 2*clock.getDelta());//clock.getElapsedTime());
-    bounceValue-=gravity;
-    if(clock.getElapsedTime()>treeReleaseInterval){
-    	clock.start();
-    	addPathTree();
-    	if(!hasCollided){
-			score+=2*treeReleaseInterval;
-			// scoreText.innerHTML=score.toString();
+	//stats.update();
+    //animate
+	if (state == 1) {
+		rollingGroundSphere.rotation.x += rollingSpeed;
+		heroSphere.rotation.x -= heroRollingSpeed;
+		if(heroSphere.position.y<=heroBaseY){
+			jumping=false;
+			bounceValue=(Math.random()*0.04)+0.005;
 		}
-    }
-    doTreeLogic();
-    doExplosionLogic();
-    render();
+		heroSphere.position.y+=bounceValue;
+		heroSphere.position.x=THREE.Math.lerp(heroSphere.position.x,currentLane, 2*clock.getDelta());//clock.getElapsedTime());
+		bounceValue-=gravity;
+		if(clock.getElapsedTime()>treeReleaseInterval){
+			clock.start();
+			addPathTree();
+			// if(!hasCollided){
+				score+=2*treeReleaseInterval;
+				document.getElementById('high-score-value').textContent = score.toString();
+			// }
+		}
+		doTreeLogic();
+		doExplosionLogic();
+		render();
+	}
+	
 	requestAnimationFrame(update);//request next update
 }
+document.getElementById('resume-button').addEventListener('click', resumeGame);
 
+function resumeGame() {
+    document.getElementById('pause-screen').style.display = 'none';
+	state = 1;
+	console.log(heroRollingSpeed, ' ', rollingSpeed);
+}
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'p' || event.key === 'P') {
+        pauseGame();
+    }
+});
+
+function pauseGame() {
+    document.getElementById('pause-screen').style.display = 'block';
+    state = 0; 
+	console.log(heroRollingSpeed, ' ', rollingSpeed);
+}
+
+
+
+// Update health
+function updateHealth(newHealth) {
+    health = newHealth;
+    document.getElementById('health-value').textContent = health;
+}
 function doTreeLogic(){
 	var oneTree;
 	var treePos = new THREE.Vector3();
@@ -268,8 +299,8 @@ function doTreeLogic(){
 		}else{//check collision
 			if(treePos.distanceTo(heroSphere.position)<=0.6){
 				console.log("hit");
+				updateHealth(health - 1);
 				hasCollided=true;
-				gameOver = true;
 				explode();
 			}
 		}
@@ -316,7 +347,10 @@ function explode(){
 function render(){
     renderer.render(scene, camera);//draw
 }
-
+function gameOver () {
+  //cancelAnimationFrame( globalRenderID );
+  //window.clearInterval( powerupSpawnIntervalID );
+}
 function onWindowResize() {
 	//resize & align
 	sceneHeight = window.innerHeight;
