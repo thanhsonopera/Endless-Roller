@@ -50,52 +50,27 @@ var state = 1;
 var health = 10; // Initialize health
 init();
 
-function test() {
-    var rollingGroundSphere;
-    var heroSphere;
-    var rollingSpeed = 0.008;
-    var heroRollingSpeed;
-    var worldRadius = 26;
-    var heroRadius = 0.2;
-    var sphericalHelper;
-    var pathAngleValues;
-    var heroBaseY = 1.8;
-    var bounceValue = 0.1;
-    var gravity = 0.005;
-    var leftLane = -1;
-    var rightLane = 1;
-    var middleLane = 0;
-    var currentLane;
-    var clock;
-    var jumping;
-    var treeReleaseInterval = 0.5;
-    var lastTreeReleaseTime = 0;
-    var treesInPath;
-    var treesPool;
-    var particleGeometry;
-    var particleCount = 20;
-    var explosionPower = 1.06;
-    var particles;
-    //var stats;
-    var scoreText;
-    var score;
-    var hasCollided;
-
-    var state = 1;
-    var health = 10; // Initialize health
-}
-
 function init() {
-    state = 1;
-
     // set up the scene
-    if (dom) {
-        dom.removeChild(renderer.domElement);
-    }
     createScene();
-
     //call game loop
     update();
+}
+
+// Initialize default values
+function initDefaultValues() {
+    // Game parameters
+    rollingSpeed = 0.008;
+    heroRadius = 0.2;
+    worldRadius = 26;
+    heroBaseY = 1.8;
+    treeReleaseInterval = 0.5;
+    gravity = 0.005;
+    // Lane positions
+    leftLane = -1;
+    rightLane = 1;
+    middleLane = 0;
+    currentLane = middleLane;
 }
 
 function handleKeyDown(keyEvent) {
@@ -166,27 +141,6 @@ function createScene() {
     window.addEventListener("resize", onWindowResize, false); //resize callback
 
     document.onkeydown = handleKeyDown;
-
-    // 	scoreText = document.createElement('div');
-    // 	scoreText.style.position = 'absolute';
-    // 	//text2.style.zIndex = 1;    // if you still don't see the label, try uncommenting this
-    // 	scoreText.style.width = 100;
-    // 	scoreText.style.height = 100;
-    // 	//scoreText.style.backgroundColor = "blue";
-    // 	scoreText.innerHTML = "0";
-    // 	scoreText.style.top = 50 + 'px';
-    // 	scoreText.style.left = 10 + 'px';
-    // 	document.body.appendChild(scoreText);
-
-    //   var infoText = document.createElement('div');
-    // 	infoText.style.position = 'absolute';
-    // 	infoText.style.width = 100;
-    // 	infoText.style.height = 100;
-    // 	infoText.style.backgroundColor = "yellow";
-    // 	infoText.innerHTML = "UP - Jump, Left/Right - Move";
-    // 	infoText.style.top = 10 + 'px';
-    // 	infoText.style.left = 10 + 'px';
-    // 	document.body.appendChild(infoText);
 }
 
 function addLight() {
@@ -277,7 +231,6 @@ function addTree(inPath, row, isLeft) {
 }
 
 function update() {
-    //stats.update();
     //animate
     if (state == 1) {
         rollingGroundSphere.rotation.x += rollingSpeed;
@@ -315,19 +268,65 @@ function resumeGame() {
     state = 1;
     console.log(heroRollingSpeed, " ", rollingSpeed);
 }
+
 document.addEventListener("keydown", function (event) {
     if (event.key === "p" || event.key === "P") {
         pauseGame();
+    } else if (event.key == "r") {
+        resetGame();
     }
 });
 
 function pauseGame() {
-    // document.getElementById("pause-screen").style.display = "block";
-    // state = 0;
-    // console.log(heroRollingSpeed, " ", rollingSpeed);
+    console.log(heroSphere);
+    document.getElementById("pause-screen").style.display = "block";
     state = 0;
-    scene = null;
-    init();
+    console.log(heroRollingSpeed, " ", rollingSpeed);
+}
+
+// Reset the game
+function resetGame() {
+    console.log(heroSphere);
+    initDefaultValues();
+    resetVariables();
+    resetScene();
+}
+
+// Reset game variables
+function resetVariables() {
+    bouncingValue = 0.1;
+    hasCollided = false;
+    jumping = false;
+    score = 0;
+    health = 10;
+    currentLane = middleLane;
+}
+
+// Reset the scene
+function resetScene() {
+    // Reset hero position
+    heroSphere.position.set(currentLane, heroBaseY, 4.8);
+    // Reset tree pool and trees in path
+    treesInPath.forEach(function (tree) {
+        tree.visible = false;
+        treesPool.push(tree);
+    });
+    treesInPath = [];
+    // Reset explosion
+    particles.visible = false;
+    explosionPower = 1.06;
+    particles.position.set(0, 2, 4.8);
+    for (var i = 0; i < particleCount; i++) {
+        var vertex = new THREE.Vector3();
+        vertex.x = -0.2 + Math.random() * 0.4;
+        vertex.y = -0.2 + Math.random() * 0.4;
+        vertex.z = -0.2 + Math.random() * 0.4;
+        particleGeometry.vertices[i] = vertex;
+    }
+    particleGeometry.verticesNeedUpdate = true;
+    // Update UI elements
+    document.getElementById("high-score-value").textContent = score.toString();
+    document.getElementById("health-value").textContent = health.toString();
 }
 
 // Update health
