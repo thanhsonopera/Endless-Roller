@@ -41,7 +41,7 @@ var particleGeometry;
 var particleCount=20;
 var explosionPower =1.06;
 var particles;
-//var stats;
+var gameOver = false;
 var scoreText;
 var score;
 var hasCollided;
@@ -54,6 +54,7 @@ function init() {
 
 	//call game loop
 	update();
+	gameOver = false;
 }
 
 function handleKeyDown(keyEvent){
@@ -231,8 +232,7 @@ function addTree(inPath, row, isLeft){
 
 
 function update(){
-	//stats.update();
-    //animate
+	if(gameOver)return;
     rollingGroundSphere.rotation.x += rollingSpeed;
     heroSphere.rotation.x -= heroRollingSpeed;
     if(heroSphere.position.y<=heroBaseY){
@@ -269,6 +269,7 @@ function doTreeLogic(){
 			if(treePos.distanceTo(heroSphere.position)<=0.6){
 				console.log("hit");
 				hasCollided=true;
+				gameOver = true;
 				explode();
 			}
 		}
@@ -315,10 +316,7 @@ function explode(){
 function render(){
     renderer.render(scene, camera);//draw
 }
-function gameOver () {
-  //cancelAnimationFrame( globalRenderID );
-  //window.clearInterval( powerupSpawnIntervalID );
-}
+
 function onWindowResize() {
 	//resize & align
 	sceneHeight = window.innerHeight;

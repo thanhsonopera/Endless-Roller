@@ -2,3 +2,32 @@ body{
     margin: 0;
     padding: 0;
 }
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+  }
+  
+  #overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Phủ màu đen với opacity 0.5 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .hidden {
+    display: none; /* Ẩn overlay ban đầu */
+  }
+  
+  #replay-btn {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #fff;
+    border: 2px solid #000;
+    cursor: pointer;
+  }
