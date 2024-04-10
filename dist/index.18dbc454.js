@@ -142,7 +142,7 @@
       this[globalName] = mainExports;
     }
   }
-})({"f7KCu":[function(require,module,exports) {
+})({"e6cs9":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
@@ -640,10 +640,45 @@ var scoreText;
 var score;
 var hasCollided;
 var state = 1;
-var health = 3; // Initialize health
+var health = 10; // Initialize health
 init();
+function test() {
+    var rollingGroundSphere;
+    var heroSphere;
+    var rollingSpeed = 0.008;
+    var heroRollingSpeed;
+    var worldRadius = 26;
+    var heroRadius = 0.2;
+    var sphericalHelper;
+    var pathAngleValues;
+    var heroBaseY = 1.8;
+    var bounceValue = 0.1;
+    var gravity = 0.005;
+    var leftLane = -1;
+    var rightLane = 1;
+    var middleLane = 0;
+    var currentLane;
+    var clock;
+    var jumping;
+    var treeReleaseInterval = 0.5;
+    var lastTreeReleaseTime = 0;
+    var treesInPath;
+    var treesPool;
+    var particleGeometry;
+    var particleCount = 20;
+    var explosionPower = 1.06;
+    var particles;
+    //var stats;
+    var scoreText;
+    var score;
+    var hasCollided;
+    var state = 1;
+    var health = 10; // Initialize health
+}
 function init() {
+    state = 1;
     // set up the scene
+    if (dom) dom.removeChild(renderer.domElement);
     createScene();
     //call game loop
     update();
@@ -652,15 +687,18 @@ function handleKeyDown(keyEvent) {
     if (jumping) return;
     var validMove = true;
     if (keyEvent.keyCode === 37) {
+        //left
         if (currentLane == middleLane) currentLane = leftLane;
         else if (currentLane == rightLane) currentLane = middleLane;
         else validMove = false;
     } else if (keyEvent.keyCode === 39) {
+        //right
         if (currentLane == middleLane) currentLane = rightLane;
         else if (currentLane == leftLane) currentLane = middleLane;
         else validMove = false;
     } else {
         if (keyEvent.keyCode === 38) {
+            //up, jump
             bounceValue = 0.1;
             jumping = true;
         }
@@ -723,7 +761,7 @@ function createScene() {
 // 	document.body.appendChild(infoText);
 }
 function addLight() {
-    var hemisphereLight = new _three.HemisphereLight(0xfffafa, 0x000000, .9);
+    var hemisphereLight = new _three.HemisphereLight(0xfffafa, 0x000000, 0.9);
     scene.add(hemisphereLight);
     sun = (0, _lightJsDefault.default)();
     scene.add(sun);
@@ -835,9 +873,12 @@ document.addEventListener("keydown", function(event) {
     if (event.key === "p" || event.key === "P") pauseGame();
 });
 function pauseGame() {
-    document.getElementById("pause-screen").style.display = "block";
+    // document.getElementById("pause-screen").style.display = "block";
+    // state = 0;
+    // console.log(heroRollingSpeed, " ", rollingSpeed);
     state = 0;
-    console.log(heroRollingSpeed, " ", rollingSpeed);
+    scene = null;
+    init();
 }
 // Update health
 function updateHealth(newHealth) {
@@ -848,11 +889,14 @@ function doTreeLogic() {
     //var oneTree;
     var treePos = new _three.Vector3();
     var treesToRemove = [];
+    console.log(treesInPath.length);
     treesInPath.forEach(function(element, index) {
         var oneTree = treesInPath[index];
         treePos.setFromMatrixPosition(oneTree.matrixWorld);
-        if (treePos.z > 6 && oneTree.visible) treesToRemove.push(oneTree);
-        else if (treePos.distanceTo(heroSphere.position) <= 0.6) {
+        if (treePos.z > 6 && oneTree.visible) //gone out of our view zone
+        treesToRemove.push(oneTree);
+        else //check collision
+        if (treePos.distanceTo(heroSphere.position) <= 0.6) {
             console.log(oneTree.isCollided);
             if (oneTree.isCollided == false) updateHealth(health - 1);
             oneTree.isCollided = true;
@@ -866,6 +910,7 @@ function doTreeLogic() {
         fromWhere = treesInPath.indexOf(oneTree);
         treesInPath.splice(fromWhere, 1);
         treesPool.push(oneTree);
+        oneTree.isCollided = false;
         oneTree.visible = false;
         console.log("remove tree");
     });
@@ -907,7 +952,7 @@ function onWindowResize() {
     camera.updateProjectionMatrix();
 }
 
-},{"three":"ktPTu","./Entity/World.js":"bTf7o","./Entity/Tree.js":"jJ2DX","./Entity/Explosion.js":"cgeD8","./Entity/Hero.js":"i2i5W","./Enviroment/Camera.js":"8YDZF","./Enviroment/Renderer.js":"dFuKv","./Enviroment/Scene.js":"2VH6M","./Enviroment/Light.js":"chypD","@parcel/transformer-js/src/esmodule-helpers.js":"fD7H8"}],"ktPTu":[function(require,module,exports) {
+},{"three":"ktPTu","./Entity/World.js":"bTf7o","./Entity/Tree.js":"jJ2DX","./Entity/Explosion.js":"cgeD8","./Entity/Hero.js":"i2i5W","./Enviroment/Camera.js":"8YDZF","./Enviroment/Renderer.js":"dFuKv","./Enviroment/Scene.js":"2VH6M","./Enviroment/Light.js":"chypD","@parcel/transformer-js/src/esmodule-helpers.js":"cM14g"}],"ktPTu":[function(require,module,exports) {
 // Polyfills
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -28578,7 +28623,7 @@ function LensFlare() {
     console.error("THREE.LensFlare has been moved to /examples/js/objects/Lensflare.js");
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"fD7H8"}],"fD7H8":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"cM14g"}],"cM14g":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -28657,7 +28702,7 @@ RollingGroundSphere = function() {
 };
 exports.default = RollingGroundSphere;
 
-},{"three":"ktPTu","@parcel/transformer-js/src/esmodule-helpers.js":"fD7H8"}],"jJ2DX":[function(require,module,exports) {
+},{"three":"ktPTu","@parcel/transformer-js/src/esmodule-helpers.js":"cM14g"}],"jJ2DX":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _three = require("three");
@@ -28697,26 +28742,21 @@ Tree = function() {
     var tree = new _three.Object3D();
     tree.add(treeTrunk);
     tree.add(treeTop);
-    function blowUpTree(vertices, sides, currentTier, scalarMultiplier, odd) {
-        var vertexIndex;
-        var vertexVector = new _three.Vector3();
-        var midPointVector = vertices[0].clone();
-        var offset;
-        for(var i = 0; i < sides; i++){
-            vertexIndex = currentTier * sides + 1;
-            vertexVector = vertices[i + vertexIndex].clone();
-            midPointVector.y = vertexVector.y;
-            offset = vertexVector.sub(midPointVector);
-            if (odd) {
-                if (i % 2 === 0) {
-                    offset.normalize().multiplyScalar(scalarMultiplier / 6);
-                    vertices[i + vertexIndex].add(offset);
-                } else {
-                    offset.normalize().multiplyScalar(scalarMultiplier);
-                    vertices[i + vertexIndex].add(offset);
-                    vertices[i + vertexIndex].y = vertices[i + vertexIndex + sides].y + 0.05;
-                }
-            } else if (i % 2 !== 0) {
+    tree.isCollided = false;
+    return tree;
+};
+function blowUpTree(vertices, sides, currentTier, scalarMultiplier, odd) {
+    var vertexIndex;
+    var vertexVector = new _three.Vector3();
+    var midPointVector = vertices[0].clone();
+    var offset;
+    for(var i = 0; i < sides; i++){
+        vertexIndex = currentTier * sides + 1;
+        vertexVector = vertices[i + vertexIndex].clone();
+        midPointVector.y = vertexVector.y;
+        offset = vertexVector.sub(midPointVector);
+        if (odd) {
+            if (i % 2 === 0) {
                 offset.normalize().multiplyScalar(scalarMultiplier / 6);
                 vertices[i + vertexIndex].add(offset);
             } else {
@@ -28724,11 +28764,16 @@ Tree = function() {
                 vertices[i + vertexIndex].add(offset);
                 vertices[i + vertexIndex].y = vertices[i + vertexIndex + sides].y + 0.05;
             }
+        } else if (i % 2 !== 0) {
+            offset.normalize().multiplyScalar(scalarMultiplier / 6);
+            vertices[i + vertexIndex].add(offset);
+        } else {
+            offset.normalize().multiplyScalar(scalarMultiplier);
+            vertices[i + vertexIndex].add(offset);
+            vertices[i + vertexIndex].y = vertices[i + vertexIndex + sides].y + 0.05;
         }
     }
-    tree.isCollided = false;
-    return tree;
-};
+}
 function tightenTree(vertices, sides, currentTier) {
     var vertexIndex;
     var vertexVector = new _three.Vector3();
@@ -28745,7 +28790,7 @@ function tightenTree(vertices, sides, currentTier) {
 }
 exports.default = Tree;
 
-},{"three":"ktPTu","@parcel/transformer-js/src/esmodule-helpers.js":"fD7H8"}],"cgeD8":[function(require,module,exports) {
+},{"three":"ktPTu","@parcel/transformer-js/src/esmodule-helpers.js":"cM14g"}],"cgeD8":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "ParticleGeometry", ()=>ParticleGeometry);
@@ -28774,7 +28819,7 @@ Explosion = function(particleGeometry, pMaterial) {
     return particles;
 };
 
-},{"three":"ktPTu","@parcel/transformer-js/src/esmodule-helpers.js":"fD7H8"}],"i2i5W":[function(require,module,exports) {
+},{"three":"ktPTu","@parcel/transformer-js/src/esmodule-helpers.js":"cM14g"}],"i2i5W":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _three = require("three");
@@ -28794,7 +28839,7 @@ Hero = function(currentLane, heroBaseY, heroRadius) {
 };
 exports.default = Hero;
 
-},{"three":"ktPTu","@parcel/transformer-js/src/esmodule-helpers.js":"fD7H8"}],"8YDZF":[function(require,module,exports) {
+},{"three":"ktPTu","@parcel/transformer-js/src/esmodule-helpers.js":"cM14g"}],"8YDZF":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _three = require("three");
@@ -28806,7 +28851,7 @@ var Camera = function(sceneWidth, sceneHeight) {
 };
 exports.default = Camera;
 
-},{"three":"ktPTu","@parcel/transformer-js/src/esmodule-helpers.js":"fD7H8"}],"dFuKv":[function(require,module,exports) {
+},{"three":"ktPTu","@parcel/transformer-js/src/esmodule-helpers.js":"cM14g"}],"dFuKv":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _three = require("three");
@@ -28822,7 +28867,7 @@ Renderer = function(sceneWidth, sceneHeight) {
 };
 exports.default = Renderer;
 
-},{"three":"ktPTu","@parcel/transformer-js/src/esmodule-helpers.js":"fD7H8"}],"2VH6M":[function(require,module,exports) {
+},{"three":"ktPTu","@parcel/transformer-js/src/esmodule-helpers.js":"cM14g"}],"2VH6M":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _three = require("three");
@@ -28833,7 +28878,7 @@ Scene = function() {
 };
 exports.default = Scene;
 
-},{"three":"ktPTu","@parcel/transformer-js/src/esmodule-helpers.js":"fD7H8"}],"chypD":[function(require,module,exports) {
+},{"three":"ktPTu","@parcel/transformer-js/src/esmodule-helpers.js":"cM14g"}],"chypD":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _three = require("three");
@@ -28850,6 +28895,6 @@ Light = function() {
 };
 exports.default = Light;
 
-},{"three":"ktPTu","@parcel/transformer-js/src/esmodule-helpers.js":"fD7H8"}]},["f7KCu","1SICI"], "1SICI", "parcelRequire8078")
+},{"three":"ktPTu","@parcel/transformer-js/src/esmodule-helpers.js":"cM14g"}]},["e6cs9","1SICI"], "1SICI", "parcelRequire8078")
 
 //# sourceMappingURL=index.18dbc454.js.map
