@@ -2,7 +2,7 @@
  
 ## Installation
 
-1. Install : `npm i`
+1. Install : `npm i three@0.100.0`
 2. Install Parcel globally: `npm i parcel -g`
 
 ## Running the project
