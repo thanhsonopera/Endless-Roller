@@ -1,53 +1,91 @@
-body{
-    margin: 0;
-    padding: 0;
+body {
+  margin: 0;
+  padding: 0;
+}
+#boder-selected1 {
+  border: 3px solid #000000;
+  border-radius: 10px;
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  top: 50%;
+  left: 50.5%;
+  transform: translate(-50%, -50%);
+}
+#boder-selected2 {
+  border: 3px solid #000000;
+  border-radius: 10px;
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  top: 50%;
+  left: 18.5%;
+  transform: translate(-50%, -50%);
+}
+#boder-selected3 {
+  border: 3px solid #000000;
+  border-radius: 10px;
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  top: 50%;
+  right: 0.5%;
+  transform: translate(-50%, -50%);
+}
+#play {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  bottom: 20px; /* Adjust as needed */
+  left: 50%;
+  transform: translateX(-50%);
 }
 #pause-screen {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
 #pause-screen-content {
-    background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
 }
 
 #pause-screen h1 {
-    text-align: center;
-    color: #000;
+  text-align: center;
+  color: #000;
 }
 
 #high-score {
-    position: fixed;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, 0);
-    z-index: 2; /* Sit on top */
-    color: #000;
-    font-size: 24px;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  z-index: 2; /* Sit on top */
+  color: #000;
+  font-size: 24px;
 }
 
 #health {
-    position: fixed;
-    top: 30px; /* Adjust this value as needed */
-    left: 50%;
-    transform: translate(-50%, 0);
-    z-index: 2; /* Sit on top */
-    color: #000;
-    font-size: 24px;
+  position: fixed;
+  top: 30px; /* Adjust this value as needed */
+  left: 50%;
+  transform: translate(-50%, 0);
+  z-index: 2; /* Sit on top */
+  color: #000;
+  font-size: 24px;
 }
 
 #heart-icon {
-    width: 24px;
-    height: 24px;
+  width: 24px;
+  height: 24px;
 }
