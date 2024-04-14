@@ -1,46 +1,33 @@
 import * as THREE from "three";
 
-Tree = function () {
+Rock = function () {
     var sides = 8;
     var tiers = 6;
     var scalarMultiplier = Math.random() * (0.25 - 0.1) + 0.05;
     var midPointVector = new THREE.Vector3();
-    var vertexVector = new THREE.Vector3();
     var treeGeometry = new THREE.ConeGeometry(0.5, 1, sides, tiers);
-    var treeMaterial = new THREE.MeshStandardMaterial({
-        color: 0x33ff33,
-        shading: THREE.FlatShading,
-    });
-    var offset;
     midPointVector = treeGeometry.vertices[0].clone();
-    var currentTier = 0;
-    var vertexIndex;
-    blowUpTree(treeGeometry.vertices, sides, 0, scalarMultiplier);
-    tightenTree(treeGeometry.vertices, sides, 1);
-    blowUpTree(treeGeometry.vertices, sides, 2, scalarMultiplier * 1.1, true);
-    tightenTree(treeGeometry.vertices, sides, 3);
-    blowUpTree(treeGeometry.vertices, sides, 4, scalarMultiplier * 1.2);
-    tightenTree(treeGeometry.vertices, sides, 5);
-    var treeTop = new THREE.Mesh(treeGeometry, treeMaterial);
-    treeTop.castShadow = true;
-    treeTop.receiveShadow = false;
-    treeTop.position.y = 0.9;
-    treeTop.rotation.y = Math.random() * Math.PI;
-    var treeTrunkGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.5);
-    var trunkMaterial = new THREE.MeshStandardMaterial({
-        color: 0x886633,
+    blowUpRock(treeGeometry.vertices, sides, 0, scalarMultiplier);
+    tightenRock(treeGeometry.vertices, sides, 1);
+    blowUpRock(treeGeometry.vertices, sides, 2, scalarMultiplier * 1.1, true);
+    tightenRock(treeGeometry.vertices, sides, 3);
+    blowUpRock(treeGeometry.vertices, sides, 4, scalarMultiplier * 1.2);
+    tightenRock(treeGeometry.vertices, sides, 5);
+
+    var rockGeometry = new THREE.IcosahedronGeometry(0.3, 1);
+    var rockMaterial = new THREE.MeshStandardMaterial({
+        color: 0xaaaaaa,
         shading: THREE.FlatShading,
     });
-    var treeTrunk = new THREE.Mesh(treeTrunkGeometry, trunkMaterial);
-    treeTrunk.position.y = 0.25;
+    var rock = new THREE.Mesh(rockGeometry, rockMaterial);
+    rock.position.y = 0.15;
     var tree = new THREE.Object3D();
-    tree.add(treeTrunk);
-    tree.add(treeTop);
+    tree.add(rock);
     tree.isCollided = false;
     return tree;
 };
 
-function blowUpTree(vertices, sides, currentTier, scalarMultiplier, odd) {
+function blowUpRock(vertices, sides, currentTier, scalarMultiplier, odd) {
     var vertexIndex;
     var vertexVector = new THREE.Vector3();
     var midPointVector = vertices[0].clone();
@@ -72,7 +59,7 @@ function blowUpTree(vertices, sides, currentTier, scalarMultiplier, odd) {
     }
 }
 
-function tightenTree(vertices, sides, currentTier) {
+function tightenRock(vertices, sides, currentTier) {
     var vertexIndex;
     var vertexVector = new THREE.Vector3();
     var midPointVector = vertices[0].clone();
@@ -87,4 +74,4 @@ function tightenTree(vertices, sides, currentTier) {
     }
 }
 
-export default Tree;
+export default Rock;

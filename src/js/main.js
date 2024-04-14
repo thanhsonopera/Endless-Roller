@@ -7,6 +7,7 @@ import Camera from "./Enviroment/Camera.js";
 import Renderer from "./Enviroment/Renderer.js";
 import Scene from "./Enviroment/Scene.js";
 import Light from "./Enviroment/Light.js";
+import Rock from "./Entity/Rock.js";
 var sceneWidth;
 var sceneHeight;
 var camera;
@@ -37,6 +38,8 @@ var treeReleaseInterval = 0.5;
 var lastTreeReleaseTime = 0;
 var treesInPath;
 var treesPool;
+var rocksInPath;
+var rocksPool;
 var particleGeometry;
 var particleCount = 20;
 var explosionPower = 1.06;
@@ -114,6 +117,8 @@ function createScene() {
     score = 0;
     treesInPath = [];
     treesPool = [];
+    rocksInPath = [];
+    rocksPool = [];
 
     heroRollingSpeed = (rollingSpeed * worldRadius) / heroRadius / 5;
     sphericalHelper = new THREE.Spherical();
@@ -133,6 +138,7 @@ function createScene() {
     //stats = new Stats();
     //dom.appendChild(stats.dom);
     createTreesPool();
+    createRocksPool();
     addWorld();
     addHero();
     addLight();
@@ -154,6 +160,7 @@ function addWorld() {
     rollingGroundSphere = RollingGroundSphere();
     scene.add(rollingGroundSphere);
     addWorldTrees();
+    addWorldRocks();
 }
 
 function addHero() {
@@ -176,6 +183,15 @@ function createTreesPool() {
     for (var i = 0; i < maxTreesInPool; i++) {
         newTree = Tree();
         treesPool.push(newTree);
+    }
+}
+
+function createRocksPool() {
+    var maxRocksInPool = 10;
+    var newRock;
+    for (var i = 0; i < maxRocksInPool; i++) {
+        newRock = Rock();
+        rocksPool.push(newRock);
     }
 }
 
@@ -229,6 +245,67 @@ function addTree(inPath, row, isLeft) {
 
     rollingGroundSphere.add(newTree);
 }
+function checkRockTreeCollision(rock, treesInPath) {
+    for (let i = 0; i < treesInPath.length; i++) {
+        if (rock.position.equals(treesInPath[i].position)) {
+            // If the rock is in the same position as a tree, move the rock
+            rock.position.y += 1; // Adjust this value as needed
+            break;
+        }
+    }
+}
+
+function addPathRock() {
+    var options = [0, 1, 2];
+    var lane = Math.floor(Math.random() * 3);
+    addRock(true, lane);
+    options.splice(lane, 1);
+    if (Math.random() > 0.5) {
+        lane = Math.floor(Math.random() * 2);
+        addRock(true, options[lane]);
+    }
+}
+
+function addWorldRocks() {
+    var numRocks = 15;
+    var gap = 6.28 / numRocks;
+    for (var i = 0; i < numRocks; i++) {
+        addRock(false, i * gap, true);
+        addRock(false, i * gap, false);
+    }
+}
+
+function addRock(inPath, row, isLeft) {
+    let newRock;
+    if (inPath) {
+        if (rocksPool.length == 0) return;
+        newRock = rocksPool.pop();
+        newRock.visible = true;
+        rocksInPath.push(newRock);
+        sphericalHelper.set(
+            worldRadius - 0.3,
+            pathAngleValues[row],
+            -rollingGroundSphere.rotation.x + 4
+        );
+    } else {
+        newRock = Rock(); // Assuming you have a Rock function similar to the Tree function
+        let rockAreaAngle = 0;
+        if (isLeft) {
+            rockAreaAngle = 1.68 + Math.random() * 0.1;
+        } else {
+            rockAreaAngle = 1.46 - Math.random() * 0.1;
+        }
+        sphericalHelper.set(worldRadius - 0.3, rockAreaAngle, row);
+    }
+    newRock.position.setFromSpherical(sphericalHelper);
+    const rollingGroundVector = rollingGroundSphere.position.clone().normalize();
+    const rockVector = newRock.position.clone().normalize();
+    newRock.quaternion.setFromUnitVectors(rockVector, rollingGroundVector);
+    newRock.rotation.x += Math.random() * ((2 * Math.PI) / 10) + -Math.PI / 10;
+
+    rollingGroundSphere.add(newRock);
+    checkRockTreeCollision(newRock, treesInPath);
+}
 
 function update() {
     //animate
@@ -249,12 +326,14 @@ function update() {
         if (clock.getElapsedTime() > treeReleaseInterval) {
             clock.start();
             addPathTree();
+            addPathRock();
             // if(!hasCollided){
             score += 2 * treeReleaseInterval;
             document.getElementById("high-score-value").textContent = score.toString();
             // }
         }
         doTreeLogic();
+        doRockLogic();
         doExplosionLogic();
         render();
     }
@@ -312,6 +391,12 @@ function resetScene() {
         treesPool.push(tree);
     });
     treesInPath = [];
+    // Reset rock pool and rocks in path
+    rocksInPath.forEach(function (rock) {
+        rock.visible = false;
+        rocksPool.push(rock);
+    });
+    rocksInPath = [];
     // Reset explosion
     particles.visible = false;
     explosionPower = 1.06;
@@ -367,6 +452,40 @@ function doTreeLogic() {
         oneTree.isCollided = false;
         oneTree.visible = false;
         console.log("remove tree");
+    });
+}
+
+function doRockLogic() {
+    //var oneTree;
+    var rockPos = new THREE.Vector3();
+    var rocksToRemove = [];
+    rocksInPath.forEach(function (element, index) {
+        var oneRock = rocksInPath[index];
+        rockPos.setFromMatrixPosition(oneRock.matrixWorld);
+        if (rockPos.z > 6 && oneRock.visible) {
+            //gone out of our view zone
+            rocksToRemove.push(oneRock);
+        } else {
+            //check collision
+            if (rockPos.distanceTo(heroSphere.position) <= 0.6) {
+                if (oneRock.isCollided == false) {
+                    updateHealth(health - 1);
+                }
+                oneRock.isCollided = true;
+                hasCollided = true;
+                explode();
+            }
+        }
+    });
+    var fromWhere;
+    rocksToRemove.forEach(function (element, index) {
+        var oneRock = rocksToRemove[index];
+        fromWhere = rocksInPath.indexOf(oneRock);
+        rocksInPath.splice(fromWhere, 1);
+        rocksPool.push(oneRock);
+        oneRock.isCollided = false;
+        oneRock.visible = false;
+        console.log("remove rock");
     });
 }
 
