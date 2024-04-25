@@ -49,15 +49,30 @@ var scoreText;
 var score;
 var hasCollided;
 
-var state = 1;
+var state = 0;
 var health = 10; // Initialize health
-init();
 
+initEnviroment()
+window.selected = -1
+window.onclick = function() {
+    if (window.selected != -1) {
+        console.log(window.selected);
+        while(scene.children.length > 0){ 
+            scene.remove(scene.children[0]); 
+        }
+        listSceneObjects(scene)
+        state = 1
+        init()
+        camera.position.z = 6.5;
+        camera.position.y = 2.5;
+    }
+}
+    
 function init() {
     // set up the scene
     createScene();
     //call game loop
-    update();
+    // update();
 }
 
 // Initialize default values
@@ -75,7 +90,26 @@ function initDefaultValues() {
     middleLane = 0;
     currentLane = middleLane;
 }
+function initEnviroment() {
+    sceneWidth = window.innerWidth;
+    sceneHeight = window.innerHeight;
 
+    scene = Scene();
+    camera = Camera(sceneWidth, sceneHeight);
+    renderer = Renderer(sceneWidth, sceneHeight);
+
+    dom = document.getElementById("TutContainer");
+    dom.appendChild(renderer.domElement);
+
+    window.addEventListener("resize", onWindowResize, false); //resize callback
+    document.onkeydown = handleKeyDown;
+    
+    createHeroMenu()
+    addLight()
+    // addWorld()
+    update()
+    // init();
+}
 function handleKeyDown(keyEvent) {
     if (jumping) return;
     var validMove = true;
@@ -112,6 +146,24 @@ function handleKeyDown(keyEvent) {
     }
 }
 
+function createHeroMenu() {
+    var heroSphereRight = Hero(1.2, 2, 4.8, 0.2, 0x0000FF);
+    scene.add(heroSphereRight)
+
+    var heroSphereCenter = Hero(0, 2, 4.8, 0.22, 0xFF0000);
+    scene.add(heroSphereCenter)
+
+    var heroSphereLeft = Hero(-1.2, 2, 4.8, 0.2, 0xe5f2f2);
+    scene.add(heroSphereLeft)
+
+    listSceneObjects(scene);
+}
+
+function listSceneObjects(scene) {
+    scene.children.forEach((object) => {
+        console.log(object);
+    });
+}
 function createScene() {
     hasCollided = false;
     score = 0;
@@ -124,29 +176,15 @@ function createScene() {
     sphericalHelper = new THREE.Spherical();
     pathAngleValues = [1.52, 1.57, 1.62];
 
-    sceneWidth = window.innerWidth;
-    sceneHeight = window.innerHeight;
-    scene = Scene();
-    camera = Camera(sceneWidth, sceneHeight);
-    renderer = Renderer(sceneWidth, sceneHeight);
-
     clock = new THREE.Clock();
     clock.start();
 
-    dom = document.getElementById("TutContainer");
-    dom.appendChild(renderer.domElement);
-    //stats = new Stats();
-    //dom.appendChild(stats.dom);
     createTreesPool();
     createRocksPool();
     addWorld();
     addHero();
-    addLight();
+    addLight()
     addExplosion();
-
-    window.addEventListener("resize", onWindowResize, false); //resize callback
-
-    document.onkeydown = handleKeyDown;
 }
 
 function addLight() {
@@ -166,7 +204,7 @@ function addWorld() {
 function addHero() {
     jumping = false;
     currentLane = middleLane;
-    heroSphere = Hero(currentLane, heroBaseY, heroRadius);
+    heroSphere = Hero(currentLane, heroBaseY, 4.8, heroRadius, 0xFF0000);
     scene.add(heroSphere);
 }
 
@@ -306,7 +344,12 @@ function addRock(inPath, row, isLeft) {
     rollingGroundSphere.add(newRock);
     checkRockTreeCollision(newRock, treesInPath);
 }
-
+function animateSceneObjects(scene) {
+    scene.children.forEach((object) => {
+        object.rotation.x += 0.01;
+        object.rotation.y += 0.01;
+    });
+}
 function update() {
     //animate
     if (state == 1) {
@@ -337,6 +380,10 @@ function update() {
         doExplosionLogic();
         render();
     }
+    if (state == 0) {
+        animateSceneObjects(scene);
+        render();
+    }
     requestAnimationFrame(update); //request next update
 }
 
@@ -359,7 +406,7 @@ document.addEventListener("keydown", function (event) {
 function pauseGame() {
     console.log(heroSphere);
     document.getElementById("pause-screen").style.display = "block";
-    state = 0;
+    state = 2;
     console.log(heroRollingSpeed, " ", rollingSpeed);
 }
 
