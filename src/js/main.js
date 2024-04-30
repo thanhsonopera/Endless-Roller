@@ -50,24 +50,24 @@ var score;
 var hasCollided;
 
 var state = 0;
-var health = 10; // Initialize health
+var health = 3; // Initialize health
 
-initEnviroment()
-window.selected = -1
-window.onclick = function() {
+initEnviroment();
+window.selected = -1;
+window.onclick = function () {
     if (window.selected != -1) {
         console.log(window.selected);
-        while(scene.children.length > 0){ 
-            scene.remove(scene.children[0]); 
+        while (scene.children.length > 0) {
+            scene.remove(scene.children[0]);
         }
-        listSceneObjects(scene)
-        state = 1
-        init()
+        listSceneObjects(scene);
+        state = 1;
+        init();
         camera.position.z = 6.5;
         camera.position.y = 2.5;
     }
-}
-    
+};
+
 function init() {
     // set up the scene
     createScene();
@@ -103,11 +103,11 @@ function initEnviroment() {
 
     window.addEventListener("resize", onWindowResize, false); //resize callback
     document.onkeydown = handleKeyDown;
-    
-    createHeroMenu()
-    addLight()
+
+    createHeroMenu();
+    addLight();
     // addWorld()
-    update()
+    update();
     // init();
 }
 function handleKeyDown(keyEvent) {
@@ -147,14 +147,14 @@ function handleKeyDown(keyEvent) {
 }
 
 function createHeroMenu() {
-    var heroSphereRight = Hero(1.2, 2, 4.8, 0.2, 0x0000FF);
-    scene.add(heroSphereRight)
+    var heroSphereRight = Hero(1.2, 2, 4.8, 0.2, 0x0000ff);
+    scene.add(heroSphereRight);
 
-    var heroSphereCenter = Hero(0, 2, 4.8, 0.22, 0xFF0000);
-    scene.add(heroSphereCenter)
+    var heroSphereCenter = Hero(0, 2, 4.8, 0.22, 0xff0000);
+    scene.add(heroSphereCenter);
 
     var heroSphereLeft = Hero(-1.2, 2, 4.8, 0.2, 0xe5f2f2);
-    scene.add(heroSphereLeft)
+    scene.add(heroSphereLeft);
 
     listSceneObjects(scene);
 }
@@ -183,7 +183,7 @@ function createScene() {
     createRocksPool();
     addWorld();
     addHero();
-    addLight()
+    addLight();
     addExplosion();
 }
 
@@ -204,7 +204,7 @@ function addWorld() {
 function addHero() {
     jumping = false;
     currentLane = middleLane;
-    heroSphere = Hero(currentLane, heroBaseY, 4.8, heroRadius, 0xFF0000);
+    heroSphere = Hero(currentLane, heroBaseY, 4.8, heroRadius, 0xff0000);
     scene.add(heroSphere);
 }
 
@@ -305,7 +305,7 @@ function addPathRock() {
 }
 
 function addWorldRocks() {
-    var numRocks = 15;
+    var numRocks = 10;
     var gap = 6.28 / numRocks;
     for (var i = 0; i < numRocks; i++) {
         addRock(false, i * gap, true);
@@ -351,6 +351,10 @@ function animateSceneObjects(scene) {
     });
 }
 function update() {
+    //check health
+    if (health <= 0) {
+        gameOver();
+    }
     //animate
     if (state == 1) {
         rollingGroundSphere.rotation.x += rollingSpeed;
@@ -388,6 +392,13 @@ function update() {
 }
 
 document.getElementById("resume-button").addEventListener("click", resumeGame);
+document.getElementById("restart-button").addEventListener("click", resetGame);
+document.getElementById("try-again-button").addEventListener("click", resetGame);
+
+var returnButton = document.getElementById("return-button");
+returnButton.addEventListener("click", function () {
+    window.location.href = "/index.html";
+});
 
 function resumeGame() {
     document.getElementById("pause-screen").style.display = "none";
@@ -413,6 +424,8 @@ function pauseGame() {
 // Reset the game
 function resetGame() {
     console.log(heroSphere);
+    document.getElementById("pause-screen").style.display = "none";
+    document.getElementById("game-over-screen").style.display = "none";
     initDefaultValues();
     resetVariables();
     resetScene();
@@ -424,7 +437,7 @@ function resetVariables() {
     hasCollided = false;
     jumping = false;
     score = 0;
-    health = 10;
+    health = 3;
     currentLane = middleLane;
 }
 
@@ -568,6 +581,9 @@ function render() {
     renderer.render(scene, camera); //draw
 }
 function gameOver() {
+    document.getElementById("game-over-screen").style.display = "block";
+    state = 2;
+    //alert("Your score is " + score);
     //cancelAnimationFrame( globalRenderID );
     //window.clearInterval( powerupSpawnIntervalID );
 }

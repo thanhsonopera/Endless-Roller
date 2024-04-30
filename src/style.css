@@ -1,7 +1,17 @@
+ html { 
+  background: url(./assets/bgmenu1.jpg) no-repeat center center fixed; 
+  /* -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover; */
+}
+
+/*
 body {
   margin: 0;
   padding: 0;
-}
+} */
+
 #boder-selected1 {
   border: 3px solid #000000;
   border-radius: 10px;
@@ -34,8 +44,6 @@ body {
 }
 #play {
   position: absolute;
-  width: 50px;
-  height: 50px;
   bottom: 20px; /* Adjust as needed */
   left: 50%;
   transform: translateX(-50%);
@@ -52,6 +60,7 @@ body {
   background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
+
 #pause-screen-content {
   background-color: #fefefe;
   margin: 15% auto; /* 15% from the top and centered */
@@ -66,6 +75,7 @@ body {
 }
 
 #high-score {
+  display: none;
   position: fixed;
   top: 0;
   left: 50%;
@@ -75,7 +85,17 @@ body {
   font-size: 24px;
 }
 
+#choose-skin{
+  display: inline;
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  z-index: 2; /* Sit on top */
+}
+
 #health {
+  display: none;
   position: fixed;
   top: 30px; /* Adjust this value as needed */
   left: 50%;
@@ -89,3 +109,20 @@ body {
   width: 24px;
   height: 24px;
 }
+#game-over-screen {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999; 
+}
+
+@font-face {
+  font-family: 'Pixel';
+  src: url(assets/PublicPixel-E447g.ttf) format('truetype');
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

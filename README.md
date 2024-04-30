@@ -1,5 +1,5 @@
 # Endless-Roller
- 
+
 ## Installation
 
 1. Install : `npm i three@0.100.0`
@@ -10,4 +10,6 @@
 Run the project using Parcel:
 
 ```bash
+parcel ./src/game.html
 parcel ./src/index.html
+```
