@@ -63,9 +63,18 @@ window.onclick = function () {
         while (scene.children.length > 0) {
             scene.remove(scene.children[0]);
         }
+        if (window.selected == 0) {
+            init(0xff0000)
+        }
+        else if (window.selected == 1) {
+            init(0xe5f2f2)
+        }
+        else if (window.selected == 2) {
+            init(0x0000ff)
+        }
         listSceneObjects(scene);
         state = 1;
-        init();
+        // scene.background = null
 
         camera.position.z = 6.5;
         camera.position.y = 2.5;
@@ -73,9 +82,9 @@ window.onclick = function () {
     }
 };
 
-function init() {
+function init(color) {
     // set up the scene
-    createScene();
+    createScene(color);
     audio.play();
     //call game loop
     // update();
@@ -170,7 +179,7 @@ function listSceneObjects(scene) {
         console.log(object);
     });
 }
-function createScene() {
+function createScene(color) {
     hasCollided = false;
     score = 0;
     treesInPath = [];
@@ -184,11 +193,11 @@ function createScene() {
 
     clock = new THREE.Clock();
     clock.start();
-
+    
     createTreesPool();
     createRocksPool();
     addWorld();
-    addHero();
+    addHero(color);
     addLight();
     addExplosion();
 }
@@ -198,6 +207,8 @@ function addLight() {
     scene.add(hemisphereLight);
     sun = Light();
     scene.add(sun);
+    const loader = new THREE.TextureLoader();
+    scene.background = loader.load('src\assets\bgmenu1.png');
 }
 
 function addWorld() {
@@ -207,10 +218,10 @@ function addWorld() {
     addWorldRocks();
 }
 
-function addHero() {
+function addHero(color) {
     jumping = false;
     currentLane = middleLane;
-    heroSphere = Hero(currentLane, heroBaseY, 4.8, heroRadius, 0xff0000);
+    heroSphere = Hero(currentLane, heroBaseY, 4.8, heroRadius, color);
     scene.add(heroSphere);
 }
 
@@ -360,7 +371,7 @@ function update() {
     //check health
     if (health <= 0) {
         gameOver();
-        return;
+        // return;
     }
     //animate
     if (state == 1) {
