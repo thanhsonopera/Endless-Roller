@@ -14,7 +14,14 @@ document.getElementById("btnSaveSetting").onclick = function () {
     var sliderValue = sliderElement.value;
     console.log(sliderValue);
     popup.style.display = 'block';
-    
+    var countdownInterval = setInterval(function() {
+        countdownValue--;
+        countdownElement.textContent = countdownValue;
+        if (countdownValue <= 0) {
+          clearInterval(countdownInterval);
+          popup.style.display = 'none';
+        }
+      }, 1000);
 }
 
 
