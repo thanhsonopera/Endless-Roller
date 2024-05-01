@@ -1,5 +1,6 @@
 var btnPlay = document.getElementById("btnPlay");
 var btnQuit = document.getElementById("btnQuit");
+var btnSetting = document.getElementById("btnSetting");
 var btnLeaderboard = document.getElementById("btnLeaderboard");
 btnPlay.onclick = function () {
     const playerName = document.getElementById("player-name").value;
@@ -17,5 +18,9 @@ btnQuit.onclick = function () {
 };
 
 btnLeaderboard.onclick = function () {
-    window.location.href = "/leaderboard.html";
+    window.location.href = "leaderboard.html";
 };
+
+btnSetting.onclick = function () {
+    window.location.href = "setting.html";
+}
