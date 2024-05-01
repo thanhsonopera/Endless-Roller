@@ -1,81 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
-    <link href="./output.css" rel="stylesheet" />
-    <title>Endless Roller</title>
-  </head>
-  <body>
-    <div class="flex justify-center h-screen items-center">
-      <div
-        class="w-[282px] h-[336px] bg-cover shadow-lg dark:bg-neutral-700 flex flex-col justify-between items-center"
-        style="background-image: url(assets/menu_background.png)"
-      >
-        <button
-          class="relative px-6 py-2 group mt-[100px] w-[192px]"
-          id="btnPlay"
-        >
-          <span
-            class="absolute inset-0 w-full h-full transition duration-300 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"
-          ></span>
-          <span
-            class="absolute inset-0 w-full h-full bg-[#daab76] border-2 border-black group-hover:bg-black"
-          ></span>
-          <span
-            class="relative text-black group-hover:text-white uppercase font-pixel"
-          >
-            Play</span
-          >
-        </button>
-        <button class="relative px-6 py-2 group w-[192px]" id="btnLeaderboard">
-          <span
-            class="absolute inset-0 w-full h-full transition duration-300 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"
-          ></span>
-          <span
-            class="absolute inset-0 w-full h-full bg-[#daab76] border-2 border-black group-hover:bg-black"
-          ></span>
-          <span
-            class="relative text-black group-hover:text-white uppercase font-pixel"
-          >
-            Highscore</span
-          >
-        </button>
-        <button class="relative px-6 py-2 group w-[192px]">
-          <span
-            class="absolute inset-0 w-full h-full transition duration-300 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"
-          ></span>
-          <span
-            class="absolute inset-0 w-full h-full bg-[#daab76] border-2 border-black group-hover:bg-black"
-          ></span>
-          <span
-            class="relative text-black group-hover:text-white uppercase font-pixel"
-          >
-            Option</span
-          >
-        </button>
-        <button
-          class="relative px-6 py-2 group mb-[40px] w-[192px]"
-          id="btnQuit"
-        >
-          <span
-            class="absolute inset-0 w-full h-full transition duration-300 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"
-          ></span>
-          <span
-            class="absolute inset-0 w-full h-full bg-[#daab76] border-2 border-black group-hover:bg-black"
-          ></span>
-          <span
-            class="relative text-black group-hover:text-white uppercase font-pixel"
-          >
-            Quit</span
-          >
-        </button>
-      </div>
-    </div>
-    <script type="module" src="./js/startMenu.js"></script>
-  </body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        />
+        <link href="./output.css" rel="stylesheet" />
+        <title>Endless Roller</title>
+    </head>
+    <body>
+        <div class="flex flex-col justify-center h-screen items-center">
+            <div
+                class="w-[282px] h-[336px] bg-cover shadow-lg dark:bg-neutral-700 flex flex-col justify-between items-center"
+                style="background-image: url(assets/menu_background.png)"
+            >
+                <button class="relative px-6 py-2 group mt-[100px] w-[192px]" id="btnPlay">
+                    <span
+                        class="absolute inset-0 w-full h-full transition duration-300 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"
+                    ></span>
+                    <span
+                        class="absolute inset-0 w-full h-full bg-[#daab76] border-2 border-black group-hover:bg-black"
+                    ></span>
+                    <span class="relative text-black group-hover:text-white uppercase font-pixel">
+                        Play</span
+                    >
+                </button>
+                <button class="relative px-6 py-2 group w-[192px]" id="btnLeaderboard">
+                    <span
+                        class="absolute inset-0 w-full h-full transition duration-300 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"
+                    ></span>
+                    <span
+                        class="absolute inset-0 w-full h-full bg-[#daab76] border-2 border-black group-hover:bg-black"
+                    ></span>
+                    <span class="relative text-black group-hover:text-white uppercase font-pixel">
+                        Highscore</span
+                    >
+                </button>
+                <button class="relative px-6 py-2 group w-[192px]">
+                    <span
+                        class="absolute inset-0 w-full h-full transition duration-300 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"
+                    ></span>
+                    <span
+                        class="absolute inset-0 w-full h-full bg-[#daab76] border-2 border-black group-hover:bg-black"
+                    ></span>
+                    <span class="relative text-black group-hover:text-white uppercase font-pixel">
+                        Option</span
+                    >
+                </button>
+                <button class="relative px-6 py-2 group mb-[40px] w-[192px]" id="btnQuit">
+                    <span
+                        class="absolute inset-0 w-full h-full transition duration-300 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"
+                    ></span>
+                    <span
+                        class="absolute inset-0 w-full h-full bg-[#daab76] border-2 border-black group-hover:bg-black"
+                    ></span>
+                    <span class="relative text-black group-hover:text-white uppercase font-pixel">
+                        Quit</span
+                    >
+                </button>
+            </div>
+            <div class="mt-6 w-full flex justify-center items-center">
+                <div class="font-pixel text-3xl font-extrabold mr-2 mb-4">Enter your name here</div>
+                <input
+                    id="player-name"
+                    value="Player1"
+                    class="font-pixel text-2xl font-bold rounded-lg"
+                    style="
+                        width: 260px;
+                        color: red;
+                        background-color: #daab76;
+                        border-radius: 20px;
+                        text-align: center;
+                    "
+                />
+            </div>
+        </div>
+        <script type="module" src="./js/startMenu.js"></script>
+    </body>
 </html>

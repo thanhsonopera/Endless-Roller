@@ -51,7 +51,9 @@ var hasCollided;
 
 var state = 0;
 var health = 3; // Initialize health
-var audio = new Audio('https://s3-us-west-2.amazonaws.com/s.cdpn.io/264161/Antonio-Vivaldi-Summer_01.mp3');
+var audio = new Audio(
+    "https://s3-us-west-2.amazonaws.com/s.cdpn.io/264161/Antonio-Vivaldi-Summer_01.mp3"
+);
 
 initEnviroment();
 window.selected = -1;
@@ -358,6 +360,7 @@ function update() {
     //check health
     if (health <= 0) {
         gameOver();
+        return;
     }
     //animate
     if (state == 1) {
@@ -399,8 +402,8 @@ document.getElementById("resume-button").addEventListener("click", resumeGame);
 document.getElementById("restart-button").addEventListener("click", resetGame);
 document.getElementById("try-again-button").addEventListener("click", resetGame);
 document.getElementById("btnBacktoMenu").onclick = function () {
-    window.location.href = 'index.html';
-}
+    window.location.href = "index.html";
+};
 var returnButton = document.getElementById("return-button");
 returnButton.addEventListener("click", function () {
     window.location.href = "/index.html";
@@ -598,6 +601,10 @@ function render() {
     renderer.render(scene, camera); //draw
 }
 function gameOver() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const playerName = atob(urlParams.get("playerName"));
+    sendHighScore(playerName, score);
+
     document.getElementById("game-over-screen").style.display = "block";
     state = 2;
     //alert("Your score is " + score);
@@ -611,4 +618,29 @@ function onWindowResize() {
     renderer.setSize(sceneWidth, sceneHeight);
     camera.aspect = sceneWidth / sceneHeight;
     camera.updateProjectionMatrix();
+}
+
+function sendHighScore(playerName, score) {
+    const url = "https://buffalo-perfect-evidently.ngrok-free.app/addScore";
+    const data = {
+        playerName: playerName,
+        score: score,
+    };
+
+    fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Failed to send high score");
+            }
+            console.log("High score sent successfully");
+        })
+        .catch((error) => {
+            console.error("Error sending high score:", error);
+        });
 }
