@@ -10,5 +10,5 @@
 Run the project using Parcel:
 
 ```bash
-parcel serve ./src/game.html ./src/leaderboard.html ./src/index.html
-```
+parcel serve ./src/game.html ./src/leaderboard.html ./src/index.htmlparcel serve  ./src/game.html ./src/leaderboard.html ./src/index.html ./src/setting.html
+``
