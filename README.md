@@ -10,6 +10,5 @@
 Run the project using Parcel:
 
 ```bash
-parcel ./src/game.html
-parcel ./src/index.html
+parcel serve ./src/game.html ./src/leaderboard.html ./src/index.html
 ```
