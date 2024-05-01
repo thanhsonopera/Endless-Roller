@@ -51,6 +51,7 @@ var hasCollided;
 
 var state = 0;
 var health = 3; // Initialize health
+var audio = new Audio('https://s3-us-west-2.amazonaws.com/s.cdpn.io/264161/Antonio-Vivaldi-Summer_01.mp3');
 
 initEnviroment();
 window.selected = -1;
@@ -63,14 +64,17 @@ window.onclick = function () {
         listSceneObjects(scene);
         state = 1;
         init();
+
         camera.position.z = 6.5;
         camera.position.y = 2.5;
+        window.selected = -1;
     }
 };
 
 function init() {
     // set up the scene
     createScene();
+    audio.play();
     //call game loop
     // update();
 }
@@ -394,13 +398,18 @@ function update() {
 document.getElementById("resume-button").addEventListener("click", resumeGame);
 document.getElementById("restart-button").addEventListener("click", resetGame);
 document.getElementById("try-again-button").addEventListener("click", resetGame);
-
+document.getElementById("btnBacktoMenu").onclick = function () {
+    window.location.href = 'index.html';
+}
 var returnButton = document.getElementById("return-button");
 returnButton.addEventListener("click", function () {
     window.location.href = "/index.html";
 });
 
 function resumeGame() {
+    if (audio.paused) {
+        audio.play();
+    }
     document.getElementById("pause-screen").style.display = "none";
     state = 1;
     console.log(heroRollingSpeed, " ", rollingSpeed);
@@ -415,14 +424,21 @@ document.addEventListener("keydown", function (event) {
 });
 
 function pauseGame() {
-    console.log(heroSphere);
+    if (!audio.paused) {
+        audio.pause();
+    }
+    // console.log(heroSphere);
     document.getElementById("pause-screen").style.display = "block";
     state = 2;
-    console.log(heroRollingSpeed, " ", rollingSpeed);
+    // console.log(heroRollingSpeed, " ", rollingSpeed);
 }
 
 // Reset the game
 function resetGame() {
+    if (audio.paused) {
+        audio.currentTime = 0; // reset audio to the start
+        audio.play(); // play the audio
+    }
     console.log(heroSphere);
     document.getElementById("pause-screen").style.display = "none";
     document.getElementById("game-over-screen").style.display = "none";
@@ -472,6 +488,7 @@ function resetScene() {
     // Update UI elements
     document.getElementById("high-score-value").textContent = score.toString();
     document.getElementById("health-value").textContent = health.toString();
+    state = 1;
 }
 
 // Update health

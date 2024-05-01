@@ -1,5 +1,5 @@
- html { 
-  background: url(./assets/bgmenu1.jpg) no-repeat center center fixed; 
+html {
+  background: url(./assets/bgmenu1.jpg) no-repeat center center fixed;
   /* -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -60,7 +60,6 @@ body {
   background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
-
 #pause-screen-content {
   background-color: #fefefe;
   margin: 15% auto; /* 15% from the top and centered */
@@ -85,7 +84,7 @@ body {
   font-size: 24px;
 }
 
-#choose-skin{
+#choose-skin {
   display: inline;
   position: fixed;
   top: 20%;
@@ -115,12 +114,12 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 9999; 
+  z-index: 9999;
 }
 
 @font-face {
-  font-family: 'Pixel';
-  src: url(assets/PublicPixel-E447g.ttf) format('truetype');
+  font-family: "Pixel";
+  src: url(assets/PublicPixel-E447g.ttf) format("truetype");
 }
 
 @tailwind base;

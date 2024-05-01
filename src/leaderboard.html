@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Endless Roller</title>
+    <link href="./leaderboard.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <button
+      class="relative px-3 group ml-1 mb-3 mt-1 w-[100px] h-[34px]"
+      id="btnBack"
+    >
+      <span
+        class="absolute inset-0 w-full h-full transition duration-300 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"
+      ></span>
+      <span
+        class="absolute inset-0 w-full h-full bg-[#daab76] border-2 border-black group-hover:bg-black"
+      ></span>
+      <span
+        class="relative text-black group-hover:text-white uppercase font-pixel"
+      >
+        Back</span
+      >
+    </button>
+    <div id="name" class="text-center text-3xl font-pixel mt-1">
+      Leaderboard
+    </div>
+    <div id="content" class="mt-2">
+      <div id="list"></div>
+    </div>
+    <script src="./js/leaderboard.js"></script>
+  </body>
+</html>

@@ -1,136 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-        />
-        <link href="./output.css" rel="stylesheet" />
-        <title>Endless Roller</title>
-    </head>
-    <body>
-        <div id="TutContainer"></div>
-        <div>
-            <div id="boder-selected1"></div>
-            <div id="boder-selected2"></div>
-            <div id="boder-selected3"></div>
-            <button class="relative px-6 py-2 group mt-[100px] w-[192px]" id="play">
-                <span
-                    class="absolute inset-0 w-full h-full transition duration-300 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"
-                ></span>
-                <span
-                    class="absolute inset-0 w-full h-full bg-[#daab76] border-2 border-black group-hover:bg-black"
-                ></span>
-                <span class="relative text-black group-hover:text-white uppercase font-pixel">
-                    Play</span
-                >
-            </button>
-        </div>
-        <div id="choose-skin" class="uppercase text-3xl font-pixel font-extrabold">
-            Choose your skin
-        </div>
-        <div id="high-score" class="font-pixel uppercase">
-            Your Score: <span id="high-score-value">0</span>
-        </div>
-        <div id="health">
-            <i id="heart-icon" class="fas fa-heart"></i>
-            <span id="health-value" class="font-pixel">3</span>
-        </div>
-        <div id="pause-screen">
-            <div class="flex justify-center items-center h-full">
-                <div
-                    class="w-[282px] h-[336px] bg-cover shadow-lg dark:bg-neutral-700 flex flex-col justify-center items-center"
-                    style="background-image: url(assets/menu_background.png)"
-                >
-                    <button
-                        class="relative px-6 py-2 group mt-[90px] w-[192px] mb-[30px]"
-                        id="resume-button"
-                    >
-                        <span
-                            class="absolute inset-0 w-full h-full transition duration-300 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"
-                        ></span>
-                        <span
-                            class="absolute inset-0 w-full h-full bg-[#daab76] border-2 border-black group-hover:bg-black"
-                        ></span>
-                        <span
-                            class="relative text-black group-hover:text-white uppercase font-pixel"
-                        >
-                            Resume
-                        </span>
-                    </button>
-                    <button
-                        class="relative px-6 py-2 group w-[192px] mb-[30px]"
-                        id="restart-button"
-                    >
-                        <span
-                            class="absolute inset-0 w-full h-full transition duration-300 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"
-                        ></span>
-                        <span
-                            class="absolute inset-0 w-full h-full bg-[#daab76] border-2 border-black group-hover:bg-black"
-                        ></span>
-                        <span
-                            class="relative text-black group-hover:text-white uppercase font-pixel"
-                        >
-                            Restart
-                        </span>
-                    </button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <link href="./output.css" rel="stylesheet" />
+    <title>Endless Roller</title>
+  </head>
+  <body>
+    <div id="TutContainer"></div>
+    <div>
+      <div id="boder-selected1"></div>
+      <div id="boder-selected2"></div>
+      <div id="boder-selected3"></div>
+      <button class="relative px-6 py-2 group mt-[100px] w-[192px]" id="play">
+        <span
+          class="absolute inset-0 w-full h-full transition duration-300 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"
+        ></span>
+        <span
+          class="absolute inset-0 w-full h-full bg-[#daab76] border-2 border-black group-hover:bg-black"
+        ></span>
+        <span
+          class="relative text-black group-hover:text-white uppercase font-pixel"
+        >
+          Play</span
+        >
+      </button>
+    </div>
+    <div id="choose-skin" class="uppercase text-3xl font-pixel font-extrabold">
+      Choose your skin
+    </div>
+    <div id="high-score" class="font-pixel uppercase">
+      Your Score: <span id="high-score-value">0</span>
+    </div>
+    <div id="health">
+      <i id="heart-icon" class="fas fa-heart"></i>
+      <span id="health-value" class="font-pixel">3</span>
+    </div>
+    <div id="pause-screen">
+      <div class="flex justify-center items-center h-full">
+        <div
+          class="w-[282px] h-[336px] bg-cover shadow-lg dark:bg-neutral-700 flex flex-col justify-center items-center"
+          style="background-image: url(assets/menu_background.png)"
+        >
+          <button
+            class="relative px-6 py-2 group mt-[90px] w-[192px] mb-[30px]"
+            id="resume-button"
+          >
+            <span
+              class="absolute inset-0 w-full h-full transition duration-300 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"
+            ></span>
+            <span
+              class="absolute inset-0 w-full h-full bg-[#daab76] border-2 border-black group-hover:bg-black"
+            ></span>
+            <span
+              class="relative text-black group-hover:text-white uppercase font-pixel"
+            >
+              Resume
+            </span>
+          </button>
+          <button
+            class="relative px-6 py-2 group w-[192px] mb-[30px]"
+            id="restart-button"
+          >
+            <span
+              class="absolute inset-0 w-full h-full transition duration-300 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"
+            ></span>
+            <span
+              class="absolute inset-0 w-full h-full bg-[#daab76] border-2 border-black group-hover:bg-black"
+            ></span>
+            <span
+              class="relative text-black group-hover:text-white uppercase font-pixel"
+            >
+              Restart
+            </span>
+          </button>
 
-                    <button class="relative px-6 py-2 group mb-[40px] w-[192px]">
-                        <span
-                            class="absolute inset-0 w-full h-full transition duration-300 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"
-                        ></span>
-                        <span
-                            class="absolute inset-0 w-full h-full bg-[#daab76] border-2 border-black group-hover:bg-black"
-                        ></span>
-                        <span
-                            class="relative text-black group-hover:text-white uppercase font-pixel"
-                        >
-                            Quit</span
-                        >
-                    </button>
-                </div>
-            </div>
+          <button
+            class="relative px-6 py-2 group mb-[40px] w-[192px]"
+            id="btnBacktoMenu"
+          >
+            <span
+              class="absolute inset-0 w-full h-full transition duration-300 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"
+            ></span>
+            <span
+              class="absolute inset-0 w-full h-full bg-[#daab76] border-2 border-black group-hover:bg-black"
+            ></span>
+            <span
+              class="relative text-black group-hover:text-white uppercase font-pixel"
+            >
+              Back
+            </span>
+          </button>
         </div>
-        <div id="game-over-screen">
-            <div class="flex flex-col justify-center items-center">
-                <p class="font-pixel font-extrabold text-3xl mb-8">GAME OVER</p>
-                <h3 class="font-pixel mb-3 uppercase">Wanna try again?</h3>
-                <div>
-                    <button
-                        class="relative px-6 py-2 group mb-[40px] w-[192px] mr-2"
-                        id="try-again-button"
-                    >
-                        <span
-                            class="absolute inset-0 w-full h-full transition duration-300 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"
-                        ></span>
-                        <span
-                            class="absolute inset-0 w-full h-full bg-green-400 border-2 border-black group-hover:bg-black"
-                        ></span>
-                        <span
-                            class="relative text-black group-hover:text-white uppercase font-pixel"
-                        >
-                            Yes</span
-                        >
-                    </button>
-                    <button class="relative px-6 py-2 group mb-[40px] w-[192px]" id="return-button">
-                        <span
-                            class="absolute inset-0 w-full h-full transition duration-300 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"
-                        ></span>
-                        <span
-                            class="absolute inset-0 w-full h-full bg-red-500 border-2 border-black group-hover:bg-black"
-                        ></span>
-                        <span
-                            class="relative text-black group-hover:text-white uppercase font-pixel"
-                        >
-                            Return
-                        </span>
-                    </button>
-                </div>
-            </div>
+      </div>
+    </div>
+    <div id="game-over-screen">
+      <div class="flex flex-col justify-center items-center">
+        <p class="font-pixel font-extrabold text-3xl mb-8">GAME OVER</p>
+        <h3 class="font-pixel mb-3 uppercase">Wanna try again?</h3>
+        <div>
+          <button
+            class="relative px-6 py-2 group mb-[40px] w-[192px] mr-2"
+            id="try-again-button"
+          >
+            <span
+              class="absolute inset-0 w-full h-full transition duration-300 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"
+            ></span>
+            <span
+              class="absolute inset-0 w-full h-full bg-green-400 border-2 border-black group-hover:bg-black"
+            ></span>
+            <span
+              class="relative text-black group-hover:text-white uppercase font-pixel"
+            >
+              Yes</span
+            >
+          </button>
+          <button
+            class="relative px-6 py-2 group mb-[40px] w-[192px]"
+            id="return-button"
+          >
+            <span
+              class="absolute inset-0 w-full h-full transition duration-300 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"
+            ></span>
+            <span
+              class="absolute inset-0 w-full h-full bg-red-500 border-2 border-black group-hover:bg-black"
+            ></span>
+            <span
+              class="relative text-black group-hover:text-white uppercase font-pixel"
+            >
+              Return
+            </span>
+          </button>
         </div>
-        <script type="module" src="./js/main.js"></script>
-        <script type="module" src="./js/menu.js"></script>
-    </body>
+      </div>
+    </div>
+    <script type="module" src="./js/main.js"></script>
+    <script type="module" src="./js/menu.js"></script>
+  </body>
 </html>
