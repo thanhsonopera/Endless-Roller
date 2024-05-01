@@ -8,6 +8,7 @@ import Renderer from "./Enviroment/Renderer.js";
 import Scene from "./Enviroment/Scene.js";
 import Light from "./Enviroment/Light.js";
 import Rock from "./Entity/Rock.js";
+import Heart from "./Entity/Heart.js";
 var sceneWidth;
 var sceneHeight;
 var camera;
@@ -40,6 +41,8 @@ var treesInPath;
 var treesPool;
 var rocksInPath;
 var rocksPool;
+var heartsPool;
+var heartsInPath;
 var particleGeometry;
 var particleCount = 20;
 var explosionPower = 1.06;
@@ -47,6 +50,7 @@ var particles;
 //var stats;
 var scoreText;
 var score;
+var isSendHighScore = false;
 var hasCollided;
 
 var state = 0;
@@ -64,13 +68,11 @@ window.onclick = function () {
             scene.remove(scene.children[0]);
         }
         if (window.selected == 0) {
-            init(0xff0000)
-        }
-        else if (window.selected == 1) {
-            init(0xe5f2f2)
-        }
-        else if (window.selected == 2) {
-            init(0x0000ff)
+            init(0xff0000);
+        } else if (window.selected == 1) {
+            init(0xe5f2f2);
+        } else if (window.selected == 2) {
+            init(0x0000ff);
         }
         listSceneObjects(scene);
         state = 1;
@@ -163,6 +165,7 @@ function handleKeyDown(keyEvent) {
 
 function createHeroMenu() {
     var heroSphereRight = Hero(1.2, 2, 4.8, 0.2, 0x0000ff);
+    var heart = Heart();
     scene.add(heroSphereRight);
 
     var heroSphereCenter = Hero(0, 2, 4.8, 0.22, 0xff0000);
@@ -186,6 +189,8 @@ function createScene(color) {
     treesPool = [];
     rocksInPath = [];
     rocksPool = [];
+    heartsInPath = [];
+    heartsPool = [];
 
     heroRollingSpeed = (rollingSpeed * worldRadius) / heroRadius / 5;
     sphericalHelper = new THREE.Spherical();
@@ -193,9 +198,10 @@ function createScene(color) {
 
     clock = new THREE.Clock();
     clock.start();
-    
+
     createTreesPool();
     createRocksPool();
+    createHeartsPool();
     addWorld();
     addHero(color);
     addLight();
@@ -208,7 +214,7 @@ function addLight() {
     sun = Light();
     scene.add(sun);
     const loader = new THREE.TextureLoader();
-    scene.background = loader.load('src\assets\bgmenu1.png');
+    scene.background = loader.load("srcassets\bgmenu1.png");
 }
 
 function addWorld() {
@@ -216,6 +222,7 @@ function addWorld() {
     scene.add(rollingGroundSphere);
     addWorldTrees();
     addWorldRocks();
+    addWorldHearts();
 }
 
 function addHero(color) {
@@ -242,11 +249,20 @@ function createTreesPool() {
 }
 
 function createRocksPool() {
-    var maxRocksInPool = 10;
+    var maxRocksInPool = 5;
     var newRock;
     for (var i = 0; i < maxRocksInPool; i++) {
         newRock = Rock();
         rocksPool.push(newRock);
+    }
+}
+
+function createHeartsPool() {
+    var maxHeartsInPool = 5;
+    var newHeart;
+    for (var i = 0; i < maxHeartsInPool; i++) {
+        newHeart = Heart();
+        heartsPool.push(newHeart);
     }
 }
 
@@ -315,9 +331,20 @@ function addPathRock() {
     var lane = Math.floor(Math.random() * 3);
     addRock(true, lane);
     options.splice(lane, 1);
-    if (Math.random() > 0.5) {
+    if (Math.random() > 0.7) {
         lane = Math.floor(Math.random() * 2);
         addRock(true, options[lane]);
+    }
+}
+
+function addPathHeart() {
+    var options = [0, 1, 2];
+    var lane = Math.floor(Math.random() * 3);
+    addHeart(true, lane);
+    options.splice(lane, 1);
+    if (Math.random() < 0.05) {
+        lane = Math.floor(Math.random() * 2);
+        addHeart(true, options[lane]);
     }
 }
 
@@ -327,6 +354,15 @@ function addWorldRocks() {
     for (var i = 0; i < numRocks; i++) {
         addRock(false, i * gap, true);
         addRock(false, i * gap, false);
+    }
+}
+
+function addWorldHearts() {
+    var numHearts = 5;
+    var gap = 6.28 / numHearts;
+    for (var i = 0; i < numHearts; i++) {
+        addHeart(false, i * gap, true);
+        addHeart(false, i * gap, false);
     }
 }
 
@@ -361,6 +397,41 @@ function addRock(inPath, row, isLeft) {
     rollingGroundSphere.add(newRock);
     checkRockTreeCollision(newRock, treesInPath);
 }
+
+function addHeart(inPath, row, isLeft) {
+    let newHeart;
+    if (inPath) {
+        if (heartsPool.length == 0) return;
+        newHeart = heartsPool.pop();
+        newHeart.visible = true;
+        heartsInPath.push(newHeart);
+        sphericalHelper.set(
+            worldRadius - 0.1,
+            pathAngleValues[row] + Math.random() * 0.01,
+            -rollingGroundSphere.rotation.x + 4
+        );
+    } else {
+        newHeart = Heart();
+        let rockAreaAngle = 0;
+        if (isLeft) {
+            rockAreaAngle = 1.68 + Math.random() * 0.1;
+        } else {
+            rockAreaAngle = 1.46 - Math.random() * 0.1;
+        }
+        sphericalHelper.set(worldRadius - 0.1, rockAreaAngle, row);
+    }
+    newHeart.position.setFromSpherical(sphericalHelper);
+    const rollingGroundVector = rollingGroundSphere.position.clone().normalize();
+    const rockVector = newHeart.position.clone().normalize();
+
+    newHeart.quaternion.setFromUnitVectors(rockVector, rollingGroundVector);
+    console.log(
+        `Heart position: x = ${newHeart.position.x}, y = ${newHeart.position.y}, z = ${newHeart.position.z}`
+    );
+    newHeart.position.y += 0.5;
+    rollingGroundSphere.add(newHeart);
+}
+
 function animateSceneObjects(scene) {
     scene.children.forEach((object) => {
         object.rotation.x += 0.01;
@@ -371,7 +442,6 @@ function update() {
     //check health
     if (health <= 0) {
         gameOver();
-        // return;
     }
     //animate
     if (state == 1) {
@@ -392,6 +462,7 @@ function update() {
             clock.start();
             addPathTree();
             addPathRock();
+            addPathHeart();
             // if(!hasCollided){
             score += 2 * treeReleaseInterval;
             document.getElementById("high-score-value").textContent = score.toString();
@@ -399,6 +470,7 @@ function update() {
         }
         doTreeLogic();
         doRockLogic();
+        doHeartLogic();
         doExplosionLogic();
         render();
     }
@@ -469,6 +541,7 @@ function resetVariables() {
     score = 0;
     health = 3;
     currentLane = middleLane;
+    isSendHighScore = false;
 }
 
 // Reset the scene
@@ -487,6 +560,12 @@ function resetScene() {
         rocksPool.push(rock);
     });
     rocksInPath = [];
+    // Reset heart pool and hearts in path
+    heartsInPath.forEach(function (heart) {
+        heart.visible = false;
+        heartsPool.push(heart);
+    });
+    heartsInPath = [];
     // Reset explosion
     particles.visible = false;
     explosionPower = 1.06;
@@ -580,6 +659,39 @@ function doRockLogic() {
     });
 }
 
+function doHeartLogic() {
+    var heartPos = new THREE.Vector3();
+    var heartsToRemove = [];
+    heartsInPath.forEach(function (element, index) {
+        var oneHeart = heartsInPath[index];
+        heartPos.setFromMatrixPosition(oneHeart.matrixWorld);
+        if (heartPos.z > 6 && oneHeart.visible) {
+            //gone out of our view zone
+            heartsToRemove.push(oneHeart);
+        } else {
+            //check collision
+            if (heartPos.distanceTo(heroSphere.position) <= 0.6) {
+                if (oneHeart.isCollided == false) {
+                    updateHealth(health + 1); // Assuming you have an updateHealth function
+                }
+                oneHeart.isCollided = true;
+                hasCollided = true;
+                // Assuming you have a function to handle the collision effect
+            }
+        }
+    });
+    var fromWhere;
+    heartsToRemove.forEach(function (element, index) {
+        var oneHeart = heartsToRemove[index];
+        fromWhere = heartsInPath.indexOf(oneHeart);
+        heartsInPath.splice(fromWhere, 1);
+        heartsPool.push(oneHeart);
+        oneHeart.isCollided = false;
+        oneHeart.visible = false;
+        console.log("remove heart");
+    });
+}
+
 function doExplosionLogic() {
     if (!particles.visible) return;
     for (var i = 0; i < particleCount; i++) {
@@ -614,9 +726,12 @@ function render() {
 function gameOver() {
     const urlParams = new URLSearchParams(window.location.search);
     const playerName = atob(urlParams.get("playerName"));
-    sendHighScore(playerName, score);
+    if (isSendHighScore == false) {
+        sendHighScore(playerName, score);
+    }
 
     document.getElementById("game-over-screen").style.display = "block";
+    audio.pause();
     state = 2;
     //alert("Your score is " + score);
     //cancelAnimationFrame( globalRenderID );
@@ -632,6 +747,7 @@ function onWindowResize() {
 }
 
 function sendHighScore(playerName, score) {
+    isSendHighScore = true;
     const url = "https://buffalo-perfect-evidently.ngrok-free.app/addScore";
     const data = {
         playerName: playerName,
